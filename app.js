@@ -38,8 +38,20 @@ while (contProcess){
       // Update the math correctly
       runningBalance -= Number(expenseAmount);
       
+// Check for negative balance
+      if (runningBalance < 0) {
+         console.log("⚠️ WARNING: You have exceeded your budget!");
+      }
+//Displaying current balance
       console.log(`Current Balance: $${runningBalance}`);
+      let newExpense = {
+      name: expenseName,
+      amount: Number(expenseAmount)
+      };
+    
+      expenses.push(newExpense);
    }
 }
-
+//Monthly breakdown
+console.log("Here is your monthly breakdown ", expenses);
 
