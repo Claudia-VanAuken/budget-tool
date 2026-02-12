@@ -35,23 +35,29 @@ while (contProcess){
    } else {
       let expenseAmount = readline.question("How much was it? ");
       
-      // Update the math correctly
+// Update the math correctly
       runningBalance -= Number(expenseAmount);
       
+//Categorizing
+      let expenseCategory = readline.question("What category is this? (e.g., Food, Bills, Kids): ");
+
 // Check for negative balance
       if (runningBalance < 0) {
          console.log("⚠️ WARNING: You have exceeded your budget!");
       }
+
 //Displaying current balance
       console.log(`Current Balance: $${runningBalance}`);
       let newExpense = {
       name: expenseName,
-      amount: Number(expenseAmount)
+      amount: Number(expenseAmount),
+      category: expenseCategory
       };
     
       expenses.push(newExpense);
    }
 }
 //Monthly breakdown
-console.log("Here is your monthly breakdown ", expenses);
+console.log("Here is your monthly breakdown ");
+console.table(expenses);
 
