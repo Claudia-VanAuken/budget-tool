@@ -312,4 +312,25 @@ function handleLogin(event) {
         alert("Access Denied: Check your credentials!");
     }
 }
+
+function handleLogout() {
+    // 1. Confirm with the user 
+    if (confirm("Are you sure you want to log out?")) {
+        
+        // 2. Flip the visibility back
+        const loginScreen = document.getElementById('login-form');
+        const dashContent = document.getElementById('dashboard-content');
+
+        if (loginScreen && dashContent) {
+            dashContent.style.display = 'none';
+            loginScreen.style.display = 'flex'; 
+            
+            // 3. Clear the input fields for safety
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            console.log("User logged out safely.");
+        }
+    }
+}
 window.onload = loadAllData;
