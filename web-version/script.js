@@ -40,29 +40,43 @@ function setIncome() {
     }
 }
 
+
+    let transactions = []; // Our master data list
+
 function addExpense() {
     const nameInput = document.getElementById('expense-name');
     const amountInput = document.getElementById('expense-amount');
     const categoryDropdown = document.getElementById('category-dropdown');
-    const list = document.getElementById('expense-list');
     
     const cost = Number(amountInput.value);
-    const selectedCategory = categoryDropdown.value || "General";
-    
-    if (cost > 0) {
-        currentBalance -= cost;
-        
-        const listItem = document.createElement('li');
-        listItem.textContent = `[${selectedCategory}] ${nameInput.value}: -$${cost.toFixed(2)}`;
-        list.appendChild(listItem);
+    const category = categoryDropdown.value || "General";
 
+    if (cost > 0 && nameInput.value.trim() !== "") {
+        // 1. Create the Transaction Object
+        const newTransaction = {
+            id: Date.now(), // Unique timestamp ID
+            name: nameInput.value,
+            amount: cost,
+            category: category,
+            type: 'expense'
+        };
+
+        // 2. Add to the array and update balance
+        transactions.push(newTransaction);
+        currentBalance -= cost;
+
+        // 3. Update UI and Save
+        updateDisplay();
+        renderTransactionHistory(); // We'll build this below
+        saveToLocalStorage();
+        
+        // 4. Clear inputs
         nameInput.value = "";
         amountInput.value = "";
-        listItem.style.borderLeft = "5px solid #dc3545"; // Red stripe for expenses
-        updateDisplay();
-        saveToLocalStorage();
     }
 }
+
+
 
 // --- CATEGORY MANAGEMENT ---
 function createNewCategory() {
@@ -93,34 +107,29 @@ function renderCategoryDropdown() {
 // --- STORAGE & INITIALIZATION ---
 function saveToLocalStorage() {
     localStorage.setItem('totalBalance', currentBalance);
+    // Convert our array of objects into a JSON string
+    localStorage.setItem('transactions', JSON.stringify(transactions));
     localStorage.setItem('budgetCategories', JSON.stringify(categories));
-    
-    const list = document.getElementById('expense-list');
-    if (list) {
-        localStorage.setItem('TransactionHistory', list.innerHTML);
-    }
 }
 
 function loadAllData() {
-    // Load Balance
     const savedBalance = localStorage.getItem('totalBalance');
     if (savedBalance !== null) {
         currentBalance = parseFloat(savedBalance);
         updateDisplay();
     }
 
-    // Load Categories
+    const savedTransactions = localStorage.getItem('transactions');
+    if (savedTransactions) {
+        // Convert the string back into a real Array of Objects
+        transactions = JSON.parse(savedTransactions);
+        renderTransactionHistory();
+    }
+
     const savedCats = localStorage.getItem('budgetCategories');
     if (savedCats) {
         categories = JSON.parse(savedCats);
-    }
-    renderCategoryDropdown();
-
-    // Load History
-    const savedHistory = localStorage.getItem('TransactionHistory');
-    const list = document.getElementById('expense-list');
-    if (savedHistory && list) {
-        list.innerHTML = savedHistory;
+        renderCategoryDropdown();
     }
 }
 
@@ -129,6 +138,22 @@ function clearData() {
         localStorage.clear();
         location.reload(); // Refresh the page to reset everything
     }
+}
+
+function renderTransactionHistory() {
+    const list = document.getElementById('expense-list');
+    list.innerHTML = ""; // Clear current list
+
+    transactions.forEach(t => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `[${t.category}] ${t.name}: ${t.type === 'expense' ? '-' : '+'}$${t.amount.toFixed(2)}`;
+        
+        if (t.type === 'income') {
+            listItem.style.borderLeft = "5px solid #28a745";
+        }
+        
+        list.appendChild(listItem);
+    });
 }
 
 // START THE APP
