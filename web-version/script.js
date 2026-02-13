@@ -1,54 +1,19 @@
 let currentBalance = 0;
 
-// 1. Function to set the starting income
+// 1. Function to set the starting income (Combined with Modal logic)
 function setIncome() {
     const incomeInput = document.getElementById('income-input');
-    const balanceDisplay = document.getElementById('balance-display');
     
-    // Convert text to a number
     currentBalance = Number(incomeInput.value);
     
-    // Update the screen
-    balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
-    
-    // Clear the input box
+    // Automatically close the pop-up and update everything
+    toggleModal();
+    updateDisplay();
+    saveToLocalStorage();
     incomeInput.value = "";
 }
 
-// 2. Function to subtract expenses
-function addExpense() {
-    const amountInput = document.getElementById('expense-amount');
-    const balanceDisplay = document.getElementById('balance-display');
-    
-    const cost = Number(amountInput.value);
-    
-    // Subtract from our state
-    currentBalance -= cost;
-    
-    // Update the screen
-    balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
-    
-    // Clear the box
-    amountInput.value = "";
-}
-
-function toggleModal() {
-    const modal = document.getElementById('income-modal');
-    // If it's hidden, show it. If it's showing, hide it.
-    modal.style.display = (modal.style.display === "block") ? "none" : "block";
-}
-
-function setIncome() {
-    const incomeInput = document.getElementById('income-input');
-    const balanceDisplay = document.getElementById('balance-display');
-    
-    currentBalance = Number(incomeInput.value);
-    balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
-    
-    // Automatically close the pop-up after setting
-    toggleModal();
-}
-
+// 2. Function to add expenses (Combined with History and Saving)
 function addExpense() {
     const nameInput = document.getElementById('expense-name');
     const amountInput = document.getElementById('expense-amount');
@@ -57,41 +22,69 @@ function addExpense() {
     const cost = Number(amountInput.value);
     currentBalance -= cost;
     
-    // Update balance on screen
-    document.getElementById('balance-display').textContent = `$${currentBalance.toFixed(2)}`;
-
-    // Create a new list item (li) for the history
+    // Create the history item
     const listItem = document.createElement('li');
     listItem.textContent = `${nameInput.value}: -$${cost.toFixed(2)}`;
     list.appendChild(listItem);
 
-    // Clear inputs
+    // Clear and Save
     nameInput.value = "";
     amountInput.value = "";
+    updateDisplay();
+    saveToLocalStorage();
 }
+
+// 3. Keep your addExtraIncome and ToggleModal as they are
 function addExtraIncome() {
     const sourceInput = document.getElementById('income-source');
     const amountInput = document.getElementById('extra-income-amount');
-    const balanceDisplay = document.getElementById('balance-display');
     const list = document.getElementById('expense-list');
     
     const extraMoney = Number(amountInput.value);
     
     if (extraMoney > 0) {
-        // Update the math
         currentBalance += extraMoney;
-        
-        // Update display
-        balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
-
-        // Add to history with a "Positive" style
         const listItem = document.createElement('li');
         listItem.textContent = `${sourceInput.value}: +$${extraMoney.toFixed(2)}`;
-        listItem.style.borderLeft = "5px solid #28a745"; // Green stripe for income!
+        listItem.style.borderLeft = "5px solid #28a745";
         list.appendChild(listItem);
 
-        // Clear inputs
         sourceInput.value = "";
         amountInput.value = "";
+        updateDisplay();
+        saveToLocalStorage();
     }
 }
+
+function toggleModal() {
+    const modal = document.getElementById('income-modal');
+    modal.style.display = (modal.style.display === "block") ? "none" : "block";
+}
+
+// 4. Update the screen (Make sure this exists!)
+function updateDisplay() {
+    const balanceDisplay = document.getElementById('balance-display');
+    balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
+}
+
+// 5. Storage Logic (Wait—check the "T" in TransactionHistory!)
+function saveToLocalStorage() {
+    localStorage.setItem('totalBalance', currentBalance);
+    const listHTML = document.getElementById('expense-list').innerHTML;
+    localStorage.setItem('TransactionHistory', listHTML); 
+}
+
+function loadFromLocalStorage() {
+    const savedBalance = localStorage.getItem('totalBalance');
+    const savedHistory = localStorage.getItem('TransactionHistory');
+
+    if (savedBalance !== null) {
+        currentBalance = parseFloat(savedBalance);
+        updateDisplay();
+    }
+    if (savedHistory !== null) {
+        document.getElementById('expense-list').innerHTML = savedHistory;
+    }
+}
+
+loadFromLocalStorage();
