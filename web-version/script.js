@@ -1,108 +1,125 @@
+// --- GLOBAL STATE ---
 let currentBalance = 0;
+let categories = ["Food", "Bills", "General"]; // Default categories
 
-// 1. Function to set the starting income (Combined with Modal logic)
-function setIncome() {
-    const incomeInput = document.getElementById('income-input');
-    
-    currentBalance = Number(incomeInput.value);
-    
-    // Automatically close the pop-up and update everything
-    toggleModal();
-    updateDisplay();
-    saveToLocalStorage();
-    incomeInput.value = "";
+// --- CORE LOGIC ---
+function updateDisplay() {
+    const balanceDisplay = document.getElementById('balance-display');
+    if (balanceDisplay) {
+        balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
+    }
 }
 
-// 2. Function to add expenses (Combined with History and Saving)
+function toggleModal() {
+    const modal = document.getElementById('income-modal');
+    if (modal) {
+        modal.style.display = (modal.style.display === "block") ? "none" : "block";
+    }
+}
+
+// --- INCOME & EXPENSES ---
+function setIncome() {
+    const incomeInput = document.getElementById('income-input');
+    const amount = Number(incomeInput.value);
+
+    if (amount > 0) {
+        currentBalance += amount;
+        updateDisplay();
+        saveToLocalStorage();
+        incomeInput.value = "";
+        toggleModal();
+    }
+}
+
 function addExpense() {
     const nameInput = document.getElementById('expense-name');
     const amountInput = document.getElementById('expense-amount');
+    const categoryDropdown = document.getElementById('category-dropdown');
     const list = document.getElementById('expense-list');
     
     const cost = Number(amountInput.value);
-    currentBalance -= cost;
+    const selectedCategory = categoryDropdown.value || "General";
     
-    // Create the history item
-    const listItem = document.createElement('li');
-    listItem.textContent = `${nameInput.value}: -$${cost.toFixed(2)}`;
-    list.appendChild(listItem);
-
-    // Clear and Save
-    nameInput.value = "";
-    amountInput.value = "";
-    updateDisplay();
-    saveToLocalStorage();
-}
-
-// 3. Keep your addExtraIncome and ToggleModal as they are
-function addExtraIncome() {
-    const sourceInput = document.getElementById('income-source');
-    const amountInput = document.getElementById('extra-income-amount');
-    const list = document.getElementById('expense-list');
-    
-    const extraMoney = Number(amountInput.value);
-    
-    if (extraMoney > 0) {
-        currentBalance += extraMoney;
+    if (cost > 0) {
+        currentBalance -= cost;
+        
         const listItem = document.createElement('li');
-        listItem.textContent = `${sourceInput.value}: +$${extraMoney.toFixed(2)}`;
-        listItem.style.borderLeft = "5px solid #28a745";
+        listItem.textContent = `[${selectedCategory}] ${nameInput.value}: -$${cost.toFixed(2)}`;
         list.appendChild(listItem);
 
-        sourceInput.value = "";
+        nameInput.value = "";
         amountInput.value = "";
         updateDisplay();
         saveToLocalStorage();
     }
 }
 
-function toggleModal() {
-    const modal = document.getElementById('income-modal');
-    modal.style.display = (modal.style.display === "block") ? "none" : "block";
+// --- CATEGORY MANAGEMENT ---
+function createNewCategory() {
+    const input = document.getElementById('new-category-name');
+    const name = input.value.trim();
+
+    if (name && !categories.includes(name)) {
+        categories.push(name);
+        renderCategoryDropdown();
+        saveToLocalStorage(); // Save categories along with everything else
+        input.value = "";
+    }
 }
 
-// 4. Update the screen (Make sure this exists!)
-function updateDisplay() {
-    const balanceDisplay = document.getElementById('balance-display');
-    balanceDisplay.textContent = `$${currentBalance.toFixed(2)}`;
+function renderCategoryDropdown() {
+    const dropdown = document.getElementById('category-dropdown');
+    if (!dropdown) return;
+
+    dropdown.innerHTML = '<option value="">Select Category</option>';
+    categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        dropdown.appendChild(option);
+    });
 }
 
-// 5. Storage Logic (Wait—check the "T" in TransactionHistory!)
+// --- STORAGE & INITIALIZATION ---
 function saveToLocalStorage() {
     localStorage.setItem('totalBalance', currentBalance);
-    const listHTML = document.getElementById('expense-list').innerHTML;
-    localStorage.setItem('TransactionHistory', listHTML); 
+    localStorage.setItem('budgetCategories', JSON.stringify(categories));
+    
+    const list = document.getElementById('expense-list');
+    if (list) {
+        localStorage.setItem('TransactionHistory', list.innerHTML);
+    }
 }
 
-function loadFromLocalStorage() {
+function loadAllData() {
+    // Load Balance
     const savedBalance = localStorage.getItem('totalBalance');
-    const savedHistory = localStorage.getItem('TransactionHistory');
-
     if (savedBalance !== null) {
         currentBalance = parseFloat(savedBalance);
         updateDisplay();
     }
-    if (savedHistory !== null) {
-        document.getElementById('expense-list').innerHTML = savedHistory;
+
+    // Load Categories
+    const savedCats = localStorage.getItem('budgetCategories');
+    if (savedCats) {
+        categories = JSON.parse(savedCats);
+    }
+    renderCategoryDropdown();
+
+    // Load History
+    const savedHistory = localStorage.getItem('TransactionHistory');
+    const list = document.getElementById('expense-list');
+    if (savedHistory && list) {
+        list.innerHTML = savedHistory;
     }
 }
 
-loadFromLocalStorage();
 function clearData() {
-    // 1. Confirm with the user (important for back-end safety!)
-    if (confirm("Are you sure you want to wipe all budget data? This cannot be undone.")) {
-        
-        // 2. Clear the browser's "Vault"
-        localStorage.removeItem('totalBalance');
-        localStorage.setItem('TransactionHistory', ""); // Clears the list memory
-
-        // 3. Reset the variables in the code
-        currentBalance = 0;
-
-        // 4. Update the screen to show $0 and an empty list
-        updateDisplay();
-        document.getElementById('expense-list').innerHTML = "";
-        
-        console.log("Database successfully wiped.");
+    if (confirm("Wipe all data?")) {
+        localStorage.clear();
+        location.reload(); // Refresh the page to reset everything
     }
 }
+
+// START THE APP
+loadAllData();

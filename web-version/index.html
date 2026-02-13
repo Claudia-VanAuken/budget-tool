@@ -9,8 +9,13 @@
 <body>
 
     <div class="top-controls">
-    <button onclick="toggleModal()" class="primary-btn">Set Initial Budget</button>
-    <button onclick="addExtraIncome()" class="secondary-btn">Add Extra Income</button>
+    <button onclick="toggleModal()" class="primary-btn">Add Income</button>
+
+    <div class="category-creator-stack">
+        <input type="text" id="new-category-name" placeholder="New Category Name">
+        <button onclick="createNewCategory()" class="category-btn">Add Category</button>
+    </div>
+
     <button onclick="clearData()" class="reset-btn">Reset All Data</button>
 </div>
 
@@ -26,19 +31,16 @@
 
     <main>
         <div class="card">
-            <h2>Extra Income</h2>
-            <input type="text" id="income-source" placeholder="Source (e.g., Sold Table)">
-            <input type="number" id="extra-income-amount" placeholder="Amount">
-            <button onclick="addExtraIncome()" class="income-btn">Add Income (+)</button>
-        </div>
+    <h3>Add Expense</h3>
+    <input type="text" id="expense-name" placeholder="What did you buy?">
+    <input type="number" id="expense-amount" placeholder="How much?">
+    
+    <select id="category-dropdown">
+        <option value="">Select Category</option>
+    </select>
 
-        <div class="card">
-            <h2>Add Expense</h2>
-            <input type="text" id="expense-name" placeholder="What did you buy?">
-            <input type="number" id="expense-amount" placeholder="How much?">
-            <input type="text" id="expense-category" placeholder="Category (Kids, Food, Bills)">
-            <button onclick="addExpense()" class="expense-btn">Add Expense (-)</button>
-        </div>
+    <button onclick="addExpense()">Add Expense (-)</button>
+</div>
 
         <div class="card history-card">
             <h2>Transaction History</h2>
@@ -51,7 +53,7 @@
         <div class="modal-content">
             <span class="close" onclick="toggleModal()">&times;</span>
             <h2>Set Monthly Income</h2>
-            <p>Enter your starting balance for the month.</p>
+            <p>Enter the amount to add.</p>
             <input type="number" id="income-input" placeholder="Enter total income">
             <button onclick="setIncome()">Set Budget</button>
         </div>

@@ -13,19 +13,30 @@ header {
     margin-bottom: 30px;
 }
 
+
 .top-controls {
+    /* This is the magic: it takes the box out of the normal layout flow */
+    position: absolute; 
+    top: 20px;
+    right: 20px;
+    
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Pulls the buttons to the right edge of THIS container */
-    
-    width: 100%;           /* THIS IS THE KEY: It stretches the container full-width */
-    box-sizing: border-box; /* Ensures padding doesn't cause horizontal scrolling */
-    padding-right: 40px;    /* Keeps the buttons from touching the very edge */
-    
+    align-items: flex-end;
     gap: 12px;
-    margin-top: 20px;
+    
+    /* We no longer need width: 100% because we are pinning it to a corner */
+    width: auto; 
+    z-index: 100; /* Ensures buttons stay on top of everything else */
 }
 
+/* Now, we adjust the body to let the content hit the top */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px; /* This controls how close the H1 is to the very top */
+}
 /* Base style for all buttons to keep them the same width */
 .top-controls button {
     width: 220px;           /* Gives them a uniform, professional look */
@@ -152,4 +163,26 @@ small {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+.category-creator-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-end; /* Keeps the input and button aligned to the right wall */
+}
+
+.category-creator-stack input {
+    width: 200px; /* Matching the button width for a clean vertical line */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.category-btn {
+    background-color: #17a2b8; /* A teal/cyan color to distinguish from budget buttons */
+    color: white;
+}
+
+.category-btn:hover {
+    background-color: #138496;
 }
