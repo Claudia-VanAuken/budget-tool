@@ -24,6 +24,15 @@ function setIncome() {
 
     if (amount > 0) {
         currentBalance += amount;
+        
+        // --- History Tracking ---
+        const list = document.getElementById('expense-list');
+        const listItem = document.createElement('li');
+        listItem.textContent = `Income Added: +$${amount.toFixed(2)}`;
+        listItem.style.borderLeft = "5px solid #28a745"; // Green stripe for income
+        list.appendChild(listItem);
+        // -------------------------------
+
         updateDisplay();
         saveToLocalStorage();
         incomeInput.value = "";
@@ -49,6 +58,7 @@ function addExpense() {
 
         nameInput.value = "";
         amountInput.value = "";
+        listItem.style.borderLeft = "5px solid #dc3545"; // Red stripe for expenses
         updateDisplay();
         saveToLocalStorage();
     }
