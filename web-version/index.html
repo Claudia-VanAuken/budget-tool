@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="login-screen" class="full-page-center">
+        <div class="card glass-card login-box">
+            <h2>Family Finance Login</h2>
+            <div class=" modal-body">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="handleLogin()" style="width: 100%;">Unlock Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="dashboard-content" style="display:none;">
 
     <header>
         <h1>Family Finance Dashboard</h1>
@@ -20,7 +33,7 @@
     <button onclick="toggleIncomeModal()">+ Add Income</button>
     <button onclick="toggleCategoryModal()">Add Category</button>
     <button onclick="clearData()" class="reset-btn">Reset All Data</button>
-    </div>
+    
 
 <div id="income-modal" class="modal">
     <div class="modal-content glass-card">
@@ -58,15 +71,8 @@
                 </div>
         </main>
     </div>
-
-    <div id="income-modal" class="modal">
-        <div class="modal-content">
-            <h2>Set Income</h2>
-            <input type="number" id="income-input" placeholder="0.00">
-            <button onclick="setIncome()" style="width:100%;">Confirm</button>
-            <button onclick="toggleModal()" style="background:rgba(255,255,255,0.2); margin-top:10px;">Cancel</button>
-        </div>
-    </div>
+</div>
+    
 
     <!-- Category creation modal (matches Add Income behavior) -->
     <div id="category-modal" class="modal">
@@ -97,7 +103,7 @@
             </div>
         </div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>

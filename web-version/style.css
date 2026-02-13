@@ -223,3 +223,32 @@ button:hover {
     justify-content: center;
     align-items: center;
 }
+
+
+.modal-body input, 
+.modal-body select {
+    color: #000000 !important; /* Forces the text you type to be black */
+    background: rgba(255, 255, 255, 0.9) !important; /* Makes the background nearly solid white for contrast */
+}
+
+
+.modal-body input::placeholder {
+    color: #555555;
+}
+
+
+.modal-body select option {
+    color: #000000;
+    background: white;
+}
+
+/* Forces the login box to stay centered and hide the space behind it */
+.full-page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Takes up 100% of the viewport height */
+    width: 100%;
+    position: relative;
+    z-index: 10; /* Keeps the login in front */
+}

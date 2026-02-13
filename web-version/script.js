@@ -196,10 +196,6 @@ function saveCategory() {
     toggleCategoryModal();
 }
 
-function toggleModal() {
-    const modal = document.getElementById('income-modal');
-    modal.style.display = (modal.style.display === "block") ? "none" : "block";
-}
 
 function toggleExpenseModal() {
     const modal = document.getElementById('expense-modal');
@@ -293,4 +289,35 @@ function clearData() {
     }
 }
 
+function handleLogin() {
+    // Reminder: Using console.log to see if the button is even working!
+    console.log("Login button clicked!"); 
+
+    const userField = document.getElementById('username');
+    const passField = document.getElementById('password');
+
+    // 1. Safety Check: Make sure the elements actually exist in the HTML
+    if (!userField || !passField) {
+        console.error("Could not find the username or password input fields in the HTML!");
+        return;
+    }
+
+    const user = userField.value;
+    const pass = passField.value;
+
+    // 2. The Condition
+    if (user.toLowerCase() === "claudia" && pass === "Family2026") {
+        
+        // 3. The Switch
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard-content').style.display = 'block';
+        
+        // 4. Chart Refresh: Chart.js needs to 'reset' its size now that it's visible
+        if (typeof renderChart === "function") {
+            renderChart(); 
+        }
+    } else {
+        alert("Invalid credentials. Try again!");
+    }
+}
 window.onload = loadAllData;
