@@ -14,13 +14,37 @@ header {
 }
 
 .top-controls {
-    top: 20px;
-    right: 20px;
     display: flex;
-    flex-direction: column; /* This stacks them! */
-    gap: 10px;             /* This puts a little space between them */
-    align-items: flex-end; /* This keeps them lined up to the right edge */
-    z-index: 100;
+    flex-direction: column;
+    align-items: flex-end; /* Pulls the buttons to the right edge of THIS container */
+    
+    width: 100%;           /* THIS IS THE KEY: It stretches the container full-width */
+    box-sizing: border-box; /* Ensures padding doesn't cause horizontal scrolling */
+    padding-right: 40px;    /* Keeps the buttons from touching the very edge */
+    
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* Base style for all buttons to keep them the same width */
+.top-controls button {
+    width: 220px;           /* Gives them a uniform, professional look */
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.reset-btn {
+    background-color: #dc3545;
+    color: white;
+    margin-top: 10px;       /* Extra gap to separate "Danger" from "Regular" actions */
+}
+
+.reset-btn:hover {
+    background-color: #c82333;
 }
 
 .card {

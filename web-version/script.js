@@ -88,3 +88,21 @@ function loadFromLocalStorage() {
 }
 
 loadFromLocalStorage();
+function clearData() {
+    // 1. Confirm with the user (important for back-end safety!)
+    if (confirm("Are you sure you want to wipe all budget data? This cannot be undone.")) {
+        
+        // 2. Clear the browser's "Vault"
+        localStorage.removeItem('totalBalance');
+        localStorage.setItem('TransactionHistory', ""); // Clears the list memory
+
+        // 3. Reset the variables in the code
+        currentBalance = 0;
+
+        // 4. Update the screen to show $0 and an empty list
+        updateDisplay();
+        document.getElementById('expense-list').innerHTML = "";
+        
+        console.log("Database successfully wiped.");
+    }
+}
