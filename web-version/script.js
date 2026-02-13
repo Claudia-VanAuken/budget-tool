@@ -23,25 +23,28 @@ function setIncome() {
     const amount = Number(incomeInput.value);
 
     if (amount > 0) {
+        const newTransaction = {
+            id: Date.now(),
+            name: "Initial Budget",
+            amount: amount,
+            category: "General",
+            type: 'income'
+        };
+
+        transactions.push(newTransaction);
         currentBalance += amount;
-        
-        // --- History Tracking ---
-        const list = document.getElementById('expense-list');
-        const listItem = document.createElement('li');
-        listItem.textContent = `Income Added: +$${amount.toFixed(2)}`;
-        listItem.style.borderLeft = "5px solid #28a745"; // Green stripe for income
-        list.appendChild(listItem);
-        // -------------------------------
 
         updateDisplay();
+        renderTransactionHistory();
         saveToLocalStorage();
+        
         incomeInput.value = "";
         toggleModal();
     }
 }
 
 
-    let transactions = []; // Our master data list
+    let transactions = []; // Master data list
 
 function addExpense() {
     const nameInput = document.getElementById('expense-name');
@@ -52,7 +55,7 @@ function addExpense() {
     const category = categoryDropdown.value || "General";
 
     if (cost > 0 && nameInput.value.trim() !== "") {
-        // 1. Create the Transaction Object
+        
         const newTransaction = {
             id: Date.now(), // Unique timestamp ID
             name: nameInput.value,
@@ -61,16 +64,16 @@ function addExpense() {
             type: 'expense'
         };
 
-        // 2. Add to the array and update balance
+        //Add to the array and update balance
         transactions.push(newTransaction);
         currentBalance -= cost;
 
-        // 3. Update UI and Save
+        //Update UI and Save
         updateDisplay();
-        renderTransactionHistory(); // We'll build this below
+        renderTransactionHistory(); 
         saveToLocalStorage();
         
-        // 4. Clear inputs
+        // Clear inputs
         nameInput.value = "";
         amountInput.value = "";
     }
@@ -107,7 +110,7 @@ function renderCategoryDropdown() {
 // --- STORAGE & INITIALIZATION ---
 function saveToLocalStorage() {
     localStorage.setItem('totalBalance', currentBalance);
-    // Convert our array of objects into a JSON string
+    // Convert the array of objects into a JSON string
     localStorage.setItem('transactions', JSON.stringify(transactions));
     localStorage.setItem('budgetCategories', JSON.stringify(categories));
 }
@@ -134,9 +137,13 @@ function loadAllData() {
 }
 
 function clearData() {
-    if (confirm("Wipe all data?")) {
+    if (confirm("Are you sure you want to wipe all data?")) {
         localStorage.clear();
-        location.reload(); // Refresh the page to reset everything
+        transactions = []; // Empty the array
+        currentBalance = 0;
+        categories = ["Food", "Bills", "General"]; // Reset to defaults
+        
+        location.reload(); // Simplest way to refresh the UI and storage
     }
 }
 
@@ -150,6 +157,10 @@ function renderTransactionHistory() {
         
         if (t.type === 'income') {
             listItem.style.borderLeft = "5px solid #28a745";
+        }
+
+        else if (t.type === 'expense') {
+            listItem.style.borderLeft = "5px solid #dc3545";
         }
         
         list.appendChild(listItem);
