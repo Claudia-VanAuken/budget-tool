@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Finance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="top-controls">
+    <button id="open-income-btn" onclick="toggleModal()">Set Initial Budget</button>
+    <button id="add-funds-btn" onclick="toggleExtraIncomeModal()">Add Extra Income (+)</button>
+</div>
+
+    <header>
+        <h1>Family Finance Dashboard</h1>
+        <p>Helping you manage a busy family.</p>
+        
+        <div class="balance-container">
+            <span id="balance-display">$0.00</span>
+            <small>CURRENT BALANCE</small>
+        </div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Extra Income</h2>
+            <input type="text" id="income-source" placeholder="Source (e.g., Sold Table)">
+            <input type="number" id="extra-income-amount" placeholder="Amount">
+            <button onclick="addExtraIncome()" class="income-btn">Add Income (+)</button>
+        </div>
+
+        <div class="card">
+            <h2>Add Expense</h2>
+            <input type="text" id="expense-name" placeholder="What did you buy?">
+            <input type="number" id="expense-amount" placeholder="How much?">
+            <input type="text" id="expense-category" placeholder="Category (Kids, Food, Bills)">
+            <button onclick="addExpense()" class="expense-btn">Add Expense (-)</button>
+        </div>
+
+        <div class="card history-card">
+            <h2>Transaction History</h2>
+            <ul id="expense-list">
+                </ul>
+        </div>
+    </main>
+
+    <div id="income-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleModal()">&times;</span>
+            <h2>Set Monthly Income</h2>
+            <p>Enter your starting balance for the month.</p>
+            <input type="number" id="income-input" placeholder="Enter total income">
+            <button onclick="setIncome()">Set Budget</button>
+        </div>
+    </div>
+    <div id="extra-income-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleExtraIncomeModal()">&times;</span>
+            <h2>Add Extra Funds</h2>
+            <input type="text" id="income-source" placeholder="Source (e.g., Sold Table)">
+            <input type="number" id="extra-income-amount" placeholder="Amount">
+            <button onclick="addExtraIncome()" class="income-btn">Add to Balance</button>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>

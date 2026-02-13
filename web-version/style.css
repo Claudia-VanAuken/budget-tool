@@ -1,0 +1,131 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #87ae73;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.top-controls {
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column; /* This stacks them! */
+    gap: 10px;             /* This puts a little space between them */
+    align-items: flex-end; /* This keeps them lined up to the right edge */
+    z-index: 100;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 300px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+.income-section {
+    border-top: 5px solid #28a745; /* A green stripe to represent money coming in */
+}
+
+input {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 80%; /* Makes the boxes look uniform */
+}
+
+/* Hide the modal by default */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Dim the background */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.close {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+}
+#open-income-btn {
+    position: absolute; /* or 'fixed' if you want it to stay while scrolling */
+    top: 20px;
+    right: 20px; /* Change this to 'left: 20px' if you prefer the other side */
+    
+    /* Let's make it look a bit more like a professional settings button */
+    background-color: #6c757d; 
+    padding: 8px 15px;
+    font-size: 14px;
+    z-index: 10; /* Ensures it stays on top of other elements */
+}
+
+.balance-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* Stacks the number and the label */
+    align-items: center;
+}
+
+#balance-display {
+    font-size: 3rem; /* Makes it nice and big */
+    font-weight: bold;
+    color: #2c3e50; /* A professional dark blue/grey */
+    margin-bottom: 0;
+}
+
+small {
+    font-size: 0.8rem;
+    letter-spacing: 2px; /* Gives it that professional "Apple/Google" look */
+    color: #7f8c8d;
+    text-transform: uppercase;
+}
+
+.income-btn {
+    background-color: #28a745; /* Green for money coming in */
+    margin-bottom: 10px;
+}
+
+.income-btn:hover {
+    background-color: #218838;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

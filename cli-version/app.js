@@ -60,4 +60,4 @@ while (contProcess){
 //Monthly breakdown
 console.log("Here is your monthly breakdown ");
 console.table(expenses);
-
+console.log(`Remaining funds for the month: $${runningBalance}`);
