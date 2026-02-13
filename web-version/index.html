@@ -4,70 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Finance Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="top-controls">
-    <button onclick="toggleModal()" class="primary-btn">Add Income</button>
-
-    <div class="category-creator-stack">
-        <input type="text" id="new-category-name" placeholder="New Category Name">
-        <button onclick="createNewCategory()" class="category-btn">Add Category</button>
-    </div>
-
-    <button onclick="clearData()" class="reset-btn">Reset All Data</button>
-</div>
-
     <header>
         <h1>Family Finance Dashboard</h1>
-        <p>Helping you manage a busy family.</p>
-        
         <div class="balance-container">
             <span id="balance-display">$0.00</span>
-            <small>CURRENT BALANCE</small>
+            <small>Current Balance</small>
+            <div class="header-controls">
+    <button onclick="toggleExpenseModal()">Add Expense</button>
+    <button onclick="toggleIncomeModal()">+ Add Income</button>
+    <button onclick="toggleCategoryModal()">Add Category</button>
+    <button onclick="clearData()" class="reset-btn">Reset All Data</button>
+    </div>
+
+<div id="income-modal" class="modal">
+    <div class="modal-content glass-card">
+        <h2>Add Income</h2>
+        <div class="modal-body">
+            <input type="text" id="income-name" placeholder="Source (e.g. Paycheck)">
+            <input type="number" id="income-amount" placeholder="Amount ($)">
+            <select id="income-category">
+                <option value="Salary">Salary</option>
+                <option value="Gift">Gift</option>
+                <option value="Side Hustle">Side Hustle</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button onclick="saveIncome()" class="confirm-btn">Add to Balance</button>
+            <button onclick="toggleIncomeModal()" class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+    </div>
         </div>
     </header>
 
-    <main>
-        <div class="card">
-    <h3>Add Expense</h3>
-    <input type="text" id="expense-name" placeholder="What did you buy?">
-    <input type="number" id="expense-amount" placeholder="How much?">
-    
-    <select id="category-dropdown">
-        <option value="">Select Category</option>
-    </select>
-
-    <button onclick="addExpense()">Add Expense (-)</button>
-</div>
-
-        <div class="card history-card">
-            <h2>Transaction History</h2>
-            <ul id="expense-list">
-                </ul>
+    <div class="dashboard-wrapper">
+        <div class="chart-container">
+            <h3>Spending by Category</h3>
+            <canvas id="expenseChart"></canvas>
         </div>
-    </main>
+
+        <main>
+                <div class="card">
+                    <h3>History</h3>
+                    <ul id="expense-list"></ul>
+                </div>
+        </main>
+    </div>
 
     <div id="income-modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="toggleModal()">&times;</span>
-            <h2>Set Monthly Income</h2>
-            <p>Enter the amount to add.</p>
-            <input type="number" id="income-input" placeholder="Enter total income">
-            <button onclick="setIncome()">Set Budget</button>
-        </div>
-    </div>
-    <div id="extra-income-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="toggleExtraIncomeModal()">&times;</span>
-            <h2>Add Extra Funds</h2>
-            <input type="text" id="income-source" placeholder="Source (e.g., Sold Table)">
-            <input type="number" id="extra-income-amount" placeholder="Amount">
-            <button onclick="addExtraIncome()" class="income-btn">Add to Balance</button>
+            <h2>Set Income</h2>
+            <input type="number" id="income-input" placeholder="0.00">
+            <button onclick="setIncome()" style="width:100%;">Confirm</button>
+            <button onclick="toggleModal()" style="background:rgba(255,255,255,0.2); margin-top:10px;">Cancel</button>
         </div>
     </div>
 
+    <!-- Category creation modal (matches Add Income behavior) -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content glass-card">
+            <h2>Add Category</h2>
+            <div class="modal-body">
+                <input type="text" id="category-name-modal" placeholder="Category name (e.g. Groceries)">
+            </div>
+            <div class="modal-footer">
+                <button onclick="saveCategory()" class="confirm-btn">Save Category</button>
+                <button onclick="toggleCategoryModal()" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense creation modal (matches Add Income behavior) -->
+    <div id="expense-modal" class="modal">
+        <div class="modal-content glass-card">
+            <h2>Add Expense</h2>
+            <div class="modal-body">
+                <input type="text" id="expense-name-modal" placeholder="Item name">
+                <input type="number" id="expense-amount-modal" placeholder="Amount">
+                <select id="expense-category-modal"></select>
+            </div>
+            <div class="modal-footer">
+                <button onclick="addExpense()" class="confirm-btn">Save Expense</button>
+                <button onclick="toggleExpenseModal()" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

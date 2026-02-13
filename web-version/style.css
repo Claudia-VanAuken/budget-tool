@@ -1,188 +1,225 @@
+/* Family Finance Dashboard - Meadow & Glass Edition
+   Author: Claudia 
+   Note: Keep the xynthi-poppy.jpg in the /images folder for the local link to work.
+*/
+
+:root {
+    /* Reminder: These variables control the "thickness" and "glow" of the glass cards */
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* --- BASE STYLES --- */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #87ae73;
-    color: #333;
+    /* Reminder: The linear-gradient here adds a slight "tint" so white text is readable against poppies */
+    background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.2)), 
+                      url('images/xynthi-poppy.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Keeps the meadow still while I scroll history */
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    position: relative; /* Reminder: Needed for absolute child elements if I add any back later */
 }
 
 header {
     text-align: center;
-    margin-bottom: 30px;
-}
-
-
-.top-controls {
-    /* This is the magic: it takes the box out of the normal layout flow */
-    position: absolute; 
-    top: 20px;
-    right: 20px;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-    
-    /* We no longer need width: 100% because we are pinning it to a corner */
-    width: auto; 
-    z-index: 100; /* Ensures buttons stay on top of everything else */
-}
-
-/* Now, we adjust the body to let the content hit the top */
-body {
+    padding: 30px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px; /* This controls how close the H1 is to the very top */
-}
-/* Base style for all buttons to keep them the same width */
-.top-controls button {
-    width: 220px;           /* Gives them a uniform, professional look */
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.reset-btn {
-    background-color: #dc3545;
-    color: white;
-    margin-top: 10px;       /* Extra gap to separate "Danger" from "Regular" actions */
-}
-
-.reset-btn:hover {
-    background-color: #c82333;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 300px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-.income-section {
-    border-top: 5px solid #28a745; /* A green stripe to represent money coming in */
-}
-
-input {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 80%; /* Makes the boxes look uniform */
-}
-
-/* Hide the modal by default */
-.modal {
-    display: none; 
-    position: fixed;
-    z-index: 1;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5); /* Dim the background */
-}
-
-.modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-}
-
-.close {
-    float: right;
-    font-size: 28px;
-    cursor: pointer;
-}
-#open-income-btn {
-    position: absolute; /* or 'fixed' if you want it to stay while scrolling */
-    top: 20px;
-    right: 20px; /* Change this to 'left: 20px' if you prefer the other side */
-    
-    /* Let's make it look a bit more like a professional settings button */
-    background-color: #6c757d; 
-    padding: 8px 15px;
-    font-size: 14px;
-    z-index: 10; /* Ensures it stays on top of other elements */
-}
-
-.balance-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column; /* Stacks the number and the label */
-    align-items: center;
+    gap: 10px;
 }
 
 #balance-display {
-    font-size: 3rem; /* Makes it nice and big */
+    font-size: 3.5rem; 
     font-weight: bold;
-    color: #2c3e50; /* A professional dark blue/grey */
-    margin-bottom: 0;
+    color: white;
+    text-shadow: var(--text-shadow);
 }
 
-small {
-    font-size: 0.8rem;
-    letter-spacing: 2px; /* Gives it that professional "Apple/Google" look */
-    color: #7f8c8d;
-    text-transform: uppercase;
+/* --- THE STUPID BUTTONS FIX --- */
+/* Reminder: Used flex here to keep buttons in a neat row under the balance without overlapping */
+.header-controls {
+    position: relative; 
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap; 
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+    width: 100%;
 }
 
-.income-btn {
-    background-color: #28a745; /* Green for money coming in */
+/* Make header buttons consistent and wide enough for labels */
+.header-controls > button {
+    min-width: 140px;
+    padding: 10px 16px;
+}
+
+/* --- DASHBOARD LAYOUT --- */
+/* Reminder: This wrapper is what keeps the Chart on the Left and List on the Right */
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: row; 
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 95%;
+    max-width: 1200px;
+    margin: 10px auto 40px auto;
+}
+
+/* Update the container to have a strict height */
+.chart-container {
+    flex: 1.5; 
+    min-width: 450px;
+    height: 500px; /* Reminder: This prevents the 'bottomless' look */
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(15px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px !important;
+    padding: 25px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    
+    /* Center the chart inside the glass */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#expenseChart {
+    max-height: 350px !important; /* Leaves room for the title and legend */
+    width: 100% !important;
+}
+
+main {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --- THE GLASS CARDS (General Class) --- */
+.card, .modal-content {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(15px) saturate(160%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    color: white;
+}
+
+/* --- UI ELEMENTS (Inputs & Buttons) --- */
+input, select {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+/* Reminder: Specific width for the category input in the header */
+#new-category-name {
+    width: 160px;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+button {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.reset-btn {
+    background: rgba(231, 76, 60, 0.4) !important; /* Soft red so I don't accidentally click it */
+}
+
+/* --- LIST STYLES --- */
+#expense-list li {
+    background: rgba(255, 255, 255, 0.1);
     margin-bottom: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border-left: 5px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.income-btn:hover {
-    background-color: #218838;
+/* --- RESPONSIVENESS --- */
+/* Reminder: For if the screen is smaller than 900px, this will stack everything vertically */
+@media (max-width: 900px) {
+    .dashboard-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    .chart-container {
+        min-width: 90%;
+    }
 }
 
-.button-group {
+/* --- MODAL STYLES --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 3000; /* Reminder: Keep this higher than the chart so it's on top */
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dims the poppies slightly */
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    margin: 15% auto;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Reminder: The .glass-card will apply here! */
+}
+
+.modal-body {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.category-creator-stack {
+
+.modal-body input, .modal-body select {
+    width: 100% !important; /* Forces inputs to fill the modal width */
+}
+
+/* Ensure modal action buttons sit in a row, not stacked */
+.modal-footer {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: flex-end; /* Keeps the input and button aligned to the right wall */
-}
-
-.category-creator-stack input {
-    width: 200px; /* Matching the button width for a clean vertical line */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.category-btn {
-    background-color: #17a2b8; /* A teal/cyan color to distinguish from budget buttons */
-    color: white;
-}
-
-.category-btn:hover {
-    background-color: #138496;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
 }
